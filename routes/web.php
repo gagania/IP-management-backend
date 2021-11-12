@@ -27,8 +27,12 @@ $router->post('/login','AuthController@login');
 $router->get('/user','UserController@index');
 $router->get('/user/{id}','UserController@show');
 
-//category
+//IP Address
 $router->get('ip/', 'IpController@index');
 $router->get('ip/{id}/', 'IpController@show');
 $router->post('/ip','IpController@create');
 $router->put('ip/{id}/', 'IpController@update');
+
+//Audit Trails
+$router->get('audit_trails/', 'AuditTrailsController@index');
+$router->get('audit_trails/{id}/', 'AuditTrailsController@show');
