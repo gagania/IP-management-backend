@@ -16,3 +16,19 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+//Generate Application key
+// $router->get('/key',function(){
+//     return Str::random(32);
+// });
+
+$router->post('/register','AuthController@register');
+$router->post('/login','AuthController@login');
+$router->get('/user','UserController@index');
+$router->get('/user/{id}','UserController@show');
+
+//category
+$router->get('ip/', 'IpController@index');
+$router->get('ip/{id}/', 'IpController@show');
+$router->post('/ip','IpController@create');
+$router->put('ip/{id}/', 'IpController@update');
