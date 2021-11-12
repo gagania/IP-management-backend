@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAccessLogTable extends Migration
+class CreateAccessLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAccessLogTable extends Migration
      */
     public function up()
     {
-        Schema::create('access_log', function (Blueprint $table) {
+        Schema::create('access_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->timestamp('log_date')->useCurrent();
@@ -27,6 +27,6 @@ class CreateAccessLogTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('access_log');
+        Schema::dropIfExists('access_logs');
     }
 }

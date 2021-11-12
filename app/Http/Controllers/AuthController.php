@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\AccessLogs;
 use Illuminate\Support\Str;
 class AuthController extends Controller
 {
@@ -22,13 +23,13 @@ class AuthController extends Controller
         if ($register) {
             return response()->json([
                 'success'=> true,
-                'message' => 'Register Berhasil!',
+                'message' => 'Register Success!',
                 'data'=> $register
             ],200);
         } else {
             return response()->json([
                 'success'=> false,
-                'message' => 'Register Gagal!',
+                'message' => 'Register Fail!',
                 'data'=> ''
             ],400);
         }
@@ -45,7 +46,12 @@ class AuthController extends Controller
                 $user->update([
                     'api_token'=> $apiToken
                 ]);
-
+                // add access log
+                AccessLogs::create([
+                    'user_id'=> $user->id,
+                    'log_date'=> date('Y-m-d H:i:s')
+                ]);
+                
                 return response()->json([
                     'success' => true,
                     'message' => 'Login Success!',

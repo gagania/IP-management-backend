@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Ip;
+use App\Models\IpData;
+use App\Models\AuditTrails;
+use Illuminate\Support\Facades\Auth;
 use Throwable;
 
 class IpController extends Controller
@@ -14,14 +16,14 @@ class IpController extends Controller
     }
 
     public function index() {
-        $Ip = Ip::all();
+        $Ip = IpData::all();
         return response()->json([
             'data' => $Ip
         ]);
     }
 
     public function show($id) {
-        $Ip = Ip::where('id',$id)->get(); // or can use ::find($id);
+        $Ip = IpData::where('id',$id)->get(); // or can use ::find($id);
         return response()->json([
             'data' => $Ip
         ]);
@@ -33,12 +35,21 @@ class IpController extends Controller
             'label' => 'required',
         ]);
 
-        $name = $request->input('name');
-        $Ip = Ip::create([
-            'name'=> $name
+        $Ip = IpData::create([
+            'ip'=> $request->input('ip'),
+            'label' => $request->input('label')
         ]);
 
         if ($Ip) {
+            //add audit trail
+            AuditTrails::create([
+                'user_id'=> Auth::user()->id,
+                'action' => 'add ip',
+                'ip'=> $request->input('ip'),
+                'label' => $request->input('label'),
+                'modify_date'=> date('Y-m-d H:i:s')
+            ]);
+
             return response()->json([
                 'success'=> true,
                 'message' => 'Add Ip Success!',
@@ -54,16 +65,26 @@ class IpController extends Controller
     }
 
     public function update(Request $request,$id) {
-        $this->validate($request, ['name' => 'required']);
-        $IpCheck = Ip::where('id',$id)->get(); // or can use ::find($id);
+        $this->validate($request, [
+            'label' => 'required',
+        ]);
+        $IpCheck = IpData::where('id',$id)->get(); // or can use ::find($id);
         if (sizeof($IpCheck) == 0) {
             return response()->json(['success'=>false,'message' => 'Data not found'], 400);
         }
 
         try {
-            $Ip = Ip::find($id);
+            $Ip = IpData::find($id);
             $Ip->update([
-                'name' => $request->name
+                'label' => $request->label
+            ]);
+
+            AuditTrails::create([
+                'user_id'=> Auth::user()->id,
+                'action' => 'update ip label',
+                'ip'=> $Ip->ip,
+                'label' => $request->label,
+                'modify_date'=> date('Y-m-d H:i:s')
             ]);
             $success = true;
             $message = 'Update Ip Success';
