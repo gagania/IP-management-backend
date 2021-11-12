@@ -16,12 +16,12 @@ class AuditTrailsController extends Controller
 
     public function index() {
         return response()->json([
-            'data' => AuditTrails::all()
+            'data' => AuditTrails::with('user')->get()
         ]);
     }
 
     public function show($id) {
-        $auditTrails = AuditTrails::where('id',$id)->get(); // or can use ::find($id);
+        $auditTrails = AuditTrails::with('user')->where('id',$id)->get(); // or can use ::find($id);
         return response()->json([
             'data' => $auditTrails
         ]);

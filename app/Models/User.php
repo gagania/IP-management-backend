@@ -30,4 +30,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password', 'api_token'
     ];
+
+    public function audit_trails(){
+        return $this->hasMany('App/Models/AuditTrails','user_id');
+    }
 }
