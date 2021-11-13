@@ -18,7 +18,7 @@ $router->get('/', function () use ($router) {
 });
 
 $router->post('/register','AuthController@register');
-// $router->post('/login','AuthController@login');
+$router->post('/login','AuthController@login');
 $router->get('/user','UserController@index');
 $router->get('/user/{id}','UserController@show');
 $router->get('/logout','UserController@logout');
@@ -38,5 +38,4 @@ $router->group(['prefix' => 'audit_trails', 'middleware' => 'auth'], function() 
 $router->group(['prefix' => 'access_log', 'middleware' => 'auth'], function() use (&$router){
     $router->get('/', 'AccessLogController@index');
     $router->get('{id}/', 'AccessLogController@show');
-    $router->post('/','AccessLogController@create');
 });

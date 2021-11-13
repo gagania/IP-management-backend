@@ -35,45 +35,40 @@ class AuthController extends Controller
         }
     }
 
-    // public function login(Request $request) {
-    //     $email = $request->input('email');
-    //     $password = $request->input('password');
-    //     $user = User::where('email',$email)->first();
+    public function login(Request $request) {
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $user = User::where('email',$email)->first();
         
-    //     if ($user) {
-    //         if (Hash::check($password,$user->password)){
-    //             // $apiToken = base64_encode(Str::random(40));
-    //             // $user->update([
-    //             //     'api_token'=> $apiToken
-    //             // ]);
-    //             $user['token'] =  $user->createToken('IMApp')->accessToken;
-    //             // add access log
-    //             AccessLogs::create([
-    //                 'user_id'=> $user->id,
-    //                 'log_date'=> date('Y-m-d H:i:s')
-    //             ]);
+        if ($user) {
+            if (Hash::check($password,$user->password)){
+                $user['token'] =  $user->createToken('IMApp')->accessToken;
+                // add access log
+                AccessLogs::create([
+                    'user_id'=> $user->id,
+                    'log_date'=> date('Y-m-d H:i:s')
+                ]);
                 
-    //             return response()->json([
-    //                 'success' => true,
-    //                 'message' => 'Login Success!',
-    //                 'data' =>[
-    //                     'user' => $user,
-    //                     // 'api_token' => 'Bearer '.$apiToken
-    //                 ]
-    //             ],200);
-    //         } else {
-    //             return response()->json([
-    //                 'success' => false,
-    //                 'message' => 'Login Fail!',
-    //                 'data' => ''
-    //             ],400);
-    //         }
-    //     } else {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'wrong email!',
-    //             'data' => ''
-    //         ],500);
-    //     }
-    // }
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Login Success!',
+                    'data' =>[
+                        'user' => $user,
+                    ]
+                ],200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Login Fail!',
+                    'data' => ''
+                ],400);
+            }
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'wrong email!',
+                'data' => ''
+            ],500);
+        }
+    }
 }

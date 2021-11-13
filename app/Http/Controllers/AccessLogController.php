@@ -36,25 +36,4 @@ class AccessLogController extends Controller
             ],401);
         }
     }
-
-    public function create(Request $request) {
-        $accessLog = AccessLogs::create([
-            'user_id'=> Auth::user()->id,
-            'log_date' => date('Y-m-d H:i:s')
-        ]);
-
-        if ($accessLog) {
-            return response()->json([
-                'success'=> true,
-                'message' => 'Add Access Log Success!',
-                'data'=> $accessLog
-            ],200);
-        } else {
-            return response()->json([
-                'success'=> false,
-                'message' => 'Add Access Log Fail!',
-                'data'=> ''
-            ],404);
-        }
-    }
 }
