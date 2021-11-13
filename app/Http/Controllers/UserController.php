@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
 class UserController extends Controller
@@ -112,5 +113,25 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function logout() { 
+        // return Auth;
+        if (Auth::check()) {
+            Auth::user()->AauthAcessToken()->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Logout Success',
+                'data' => ''
+            ],200);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Logout Fail',
+                'data' => ''
+            ],401);
+            
+        }
+        
     }
 }

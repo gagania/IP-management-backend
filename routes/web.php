@@ -17,22 +17,26 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-//Generate Application key
-// $router->get('/key',function(){
-//     return Str::random(32);
-// });
-
 $router->post('/register','AuthController@register');
-$router->post('/login','AuthController@login');
+// $router->post('/login','AuthController@login');
 $router->get('/user','UserController@index');
 $router->get('/user/{id}','UserController@show');
+$router->get('/logout','UserController@logout');
 
-//IP Address
-$router->get('ip/', 'IpController@index');
-$router->get('ip/{id}/', 'IpController@show');
-$router->post('/ip','IpController@create');
-$router->put('ip/{id}/', 'IpController@update');
+$router->group(['prefix' => 'ip', 'middleware' => 'auth'], function() use (&$router){
+    $router->get('/', 'IpController@index');
+    $router->get('{id}/', 'IpController@show');
+    $router->post('/','IpController@create');
+    $router->put('{id}/', 'IpController@update');
+});
 
-//Audit Trails
-$router->get('audit_trails/', 'AuditTrailsController@index');
-$router->get('audit_trails/{id}/', 'AuditTrailsController@show');
+$router->group(['prefix' => 'audit_trails', 'middleware' => 'auth'], function() use (&$router){
+    $router->get('/', 'AuditTrailsController@index');
+    $router->get('{id}/', 'AuditTrailsController@show');
+});
+
+$router->group(['prefix' => 'access_log', 'middleware' => 'auth'], function() use (&$router){
+    $router->get('/', 'AccessLogController@index');
+    $router->get('{id}/', 'AccessLogController@show');
+    $router->post('/','AccessLogController@create');
+});

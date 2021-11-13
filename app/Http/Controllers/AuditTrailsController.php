@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\AuditTrails;
-use Illuminate\Support\Facades\Auth;
-use Throwable;
 
 class AuditTrailsController extends Controller
 {
