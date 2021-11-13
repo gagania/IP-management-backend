@@ -31,7 +31,7 @@ class IpController extends Controller
 
     public function create(Request $request) {
         $this->validate($request, [
-            'ip' => 'required',
+            'ip' => 'required|ipv4',
             'label' => 'required',
         ]);
 
